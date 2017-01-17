@@ -17,6 +17,7 @@
         <div class="col-md-8 centered">
             <h2>Cadastro efetuado com sucesso!</h2>
             <p>Em breve você receberá um e-mail confirmando o cadastro.</p>
+            <p><?php echo $email; ?></p>
             <p>Obrigado!</p> 
         </div>
     </div>

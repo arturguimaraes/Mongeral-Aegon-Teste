@@ -26,7 +26,42 @@ class Pages extends CI_Controller {
 			
 			//VALIDAÇÃO OK 
 			else {
-				$this->load->view('success');
+				$this->load->model('address');
+				$address = $this->address->create();
+				
+				//Inserção do endereço com sucesso
+				if ($address != NULL) {
+					$this->load->model('contact');
+					$id = $this->contact->create($address);
+					
+					//Inserção do contato com sucesso
+					if ($id != NULL) {
+						$nome = $this->input->post('name');
+						$email = $this->input->post('email');
+						
+						$this->load->library('email');
+						$this->email->from('dont_reply@testemongeral.com', 'Teste Mongeral Aegon');
+						$this->email->to($email);
+						$this->email->subject('Obrigado ' . $nome . '!');
+					
+						$message = '<html>
+									<head>
+									  <title>Cadastro completo!</title>
+									</head>
+									<body>
+									  <h1>Obrigado ' . $nome . '!</h1>
+									  <p>Seu cadastro já foi efetuado no nosso sistema com sucesso!</p>
+									</body>
+									</html>
+									';
+						$this->email->message($message);
+						
+						$this->email->send();
+						
+						$data = array($email);
+						$this->load->view('success', $data);
+					}
+				}
 			}
 		}
 	}
